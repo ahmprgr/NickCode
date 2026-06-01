@@ -1,4 +1,4 @@
-# 🌐 CodeNik - Online Programming Learning Platform
+# 🌐 Nick Code - Online Programming Learning Platform
 
 یک سایت آموزش برنامه‌نویسی جامع به زبان فارسی مشابه w3schools برای یادگیری آسان و پروژه‌محور با استفاده از Node.js و Express.js در بک‌اند 
 
@@ -26,6 +26,6 @@
 
 ```bash
 git clone https://github.com/ahmprgr/CodeNik.git
-cd CodeNik
+cd NickCode
 npm install
 npm run start:dev
