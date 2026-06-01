@@ -25,7 +25,7 @@
 ### مراحل اجرا
 
 ```bash
-git clone https://github.com/ahmprgr/CodeNik.git
+git clone https://github.com/ahmprgr/NickCode.git
 cd NickCode
 npm install
 npm run start:dev
