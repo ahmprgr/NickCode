@@ -1,7 +1,7 @@
 const app = require("./app");
-require("dotenv").config();
+const { port } = require("./../configs/env")
 const runDB = require("./../configs/db");
-const port = process.env.PORT || 1404;
+
 
 async function bootstrap() {
   await app.listen(port, () => {

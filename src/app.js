@@ -9,7 +9,7 @@ const isAdmin = require("./middlewares/isAdmin.js");
 const authGuard = require("./middlewares/authGuard.js");
 const courseRouter = require("./modules/admin/courses/courseRouter.js");
 const courseController = require("./modules/admin/courses/courseController.js");
-require("dotenv").config();
+const { secretKey, dbURI } = require("./../configs/env.js")
 
 const app = express();
 
@@ -17,7 +17,7 @@ const app = express();
 app.use(cookieParser());
 app.use(
   session({
-    secret: process.env.SECRET,
+    secret: secretKey,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -26,7 +26,7 @@ app.use(
       secure: false,
     },
     store: MongoStore.create({
-      mongoUrl: process.env.MONGO_DB_URI,
+      mongoUrl: dbURI,
       ttl: 60 * 60 * 36,
       autoRemove: "native",
     }),
