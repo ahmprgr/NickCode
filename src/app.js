@@ -10,6 +10,8 @@ const authGuard = require("./middlewares/authGuard.js");
 const courseRouter = require("./modules/admin/courses/courseRouter.js");
 const courseController = require("./modules/admin/courses/courseController.js");
 const { secretKey, dbURI } = require("./../configs/env.js")
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require("./../configs/swagger.js");
 
 const app = express();
 
@@ -35,6 +37,8 @@ app.use(
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(helmet());
+//swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //* router
 app.use("/api/auth", authRouter);
