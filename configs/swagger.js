@@ -1,11 +1,14 @@
+const path = require("path")
 const swaggerJsdoc = require("swagger-jsdoc");
+
+const rootPath = path.resolve(__dirname, "../");
 
 const options = {
   definition: {
     openapi: "3.0.0",
     info: {
       title: "Nick Code",
-      version: "1.0.0",
+      version: "0.0.1",
       description:
         "A website where can learn programming with persian language",
       contact: {
@@ -21,8 +24,7 @@ const options = {
     ],
   },
   apis: [
-    "./../src/modules/admin/courses/courseRouter.js",
-    "./../src/modules/user/auth/userRouter.js",
+    path.join(rootPath, "src/modules/**/*.js")
   ],
 };
 
