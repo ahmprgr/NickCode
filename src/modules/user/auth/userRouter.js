@@ -28,12 +28,15 @@ const router = express.Router();
  *       - sessionAuth: []
  *     responses:
  *       200:
- *         description: اطلاعات کاربر دریافت شد
+ *         description: دریافت اطلاعات موفقیت آمیز کاربر جاری
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "اطلاعات کاربر دریافت شد"
  *                 user:
  *                   type: object
  *                   properties:
@@ -104,6 +107,9 @@ router.get("/me",authGuard,getMe)
  *             schema:
  *               type: object
  *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "ثبت نام با موفقیت انجام شد"
  *                 user:
  *                   type: object
  *                   properties:
@@ -247,7 +253,7 @@ router.post("/login", login);
  *                 example: "taghi_2024"
  *     responses:
  *       200:
- *         description: بروزرسانی موفق
+ *         description: ویرایش موفق
  *         content:
  *           application/json:
  *             schema:
@@ -255,7 +261,7 @@ router.post("/login", login);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "پروفایل با موفقیت بروزرسانی شد"
+ *                   example: "پروفایل با موفقیت ویرایش شد"
  *       401:
  *         description: کاربر احراز هویت نشده است
  *         content:

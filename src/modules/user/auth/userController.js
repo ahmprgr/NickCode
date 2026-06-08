@@ -149,7 +149,7 @@ exports.editProfile = async (req, res) => {
         },
       );
       return res.json({
-        message: "پروفایل با موفقیت بروزرسانی شد",
+        message: "پروفایل با موفقیت ویرایش شد",
       });
     } else {
       return res.status(409).json({

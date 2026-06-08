@@ -1,7 +1,7 @@
 const express = require("express");
 const {
   createCategory,
-  updateCategory,
+  editCategory,
   deleteCategory,
   getAllCategory,
 } = require("./categoryController.js");
@@ -13,12 +13,253 @@ const {
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /api/admin/categories/create:
+ *   post:
+ *     summary: ایجاد دسته بندی
+ *     tags: [category]
+ *     security:
+ *       - sessionAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: نام دسته بندی
+ *                 example: "فرانت اند"
+ *               slug:
+ *                 type: string
+ *                 description: آدرس دسته بندی
+ *                 example: "front-end"
+ *             required:
+ *               - name
+ *               - slug
+ *     responses:
+ *       201:
+ *         description: اضافه شدن موفقیت آمیز دسته بندی
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "دسته بندی جدید با موفقیت اضافه شد"
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     slug:
+ *                       type: string
+ *       409:
+ *         description: تکراری بودن نام دسته بندی یا آدرس دسته بندی
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "نام دسته بندی یا آدرس دسته بندی تکراری میباشد"
+ *       401:
+ *         description: کاربر احراز هویت نشده است
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "لطفا اول نسبت به احراز هویت اقدام نمایید"
+ */
 router.post("/create", validator(categoryValidationSchema), createCategory);
 
-router.put("/update", validator(categoryUpdateValidationSchema), updateCategory);
+/**
+ * @swagger
+ * /api/admin/categories/edit:
+ *   put:
+ *     summary: ویرایش دسته بندی
+ *     tags: [category]
+ *     security:
+ *       - sessionAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               newName:
+ *                 type: string
+ *                 description: نام جدید دسته بندی
+ *                 example: "فرانت اند"
+ *               newSlug:
+ *                 type: string
+ *                 description: آدرس جدید دسته بندی
+ *                 example: "back-end"
+ *               oldSlug:
+ *                 type: string
+ *                 description: آدرس پیشین دسته بندی
+ *                 example: "front-end"
+ *             required:
+ *               - newName
+ *               - newSlug
+ *               - oldSlug
+ *     responses:
+ *       200:
+ *         description: ویرایش شدن موفقیت آمیز دسته بندی
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "دسته بندی جدید با موفقیت ویرایش شد"
+ *       409:
+ *         description: تکراری بودن نام دسته بندی یا آدرس دسته بندی
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "نام دسته بندی یا آدرس دسته بندی تکراری میباشد"
+ *       404:
+ *         description: پیدا نشدن دسته بندی
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "دسته بندی پیدا نشد"
+ *       401:
+ *         description: کاربر احراز هویت نشده است
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "لطفا اول نسبت به احراز هویت اقدام نمایید"
+ */
+router.put("/edit", validator(categoryUpdateValidationSchema), editCategory);
 
+/**
+ * @swagger
+ * /api/admin/categories/delete:
+ *   delete:
+ *     summary: حذف دسته بندی
+ *     tags: [category]
+ *     security:
+ *       - sessionAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 format: ObjectId
+ *                 description: شناسه دسته بندی مورد نظر
+ *             required:
+ *               - id
+ *     responses:
+ *       200:
+ *         description: حذف موفق
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "دسته بندی شما با موفقیت حذف شد"
+ *       404:
+ *         description: پیدا نشدن دسته بندی
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "دسته بندی پیدا نشد"
+ *       401:
+ *         description: کاربر احراز هویت نشده است
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "لطفا اول نسبت به احراز هویت اقدام نمایید"
+ */
 router.delete("/delete", deleteCategory);
 
+/**
+ * @swagger
+ * /api/admin/categories/:
+ *   get:
+ *     summary: دریافت اطلاعات تمامی دسته بندی ها
+ *     tags: [category]
+ *     security:
+ *       - sessionAuth: []
+ *     responses:
+ *       200:
+ *         description: دریافت موفقیت آمیز اطلاعات تمامی دسته بندی ها
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     slug:
+ *                       type: string
+ *                     courses:
+ *                       type: string
+ *                     educationalArticles:
+ *                       type: string
+ *                     author:
+ *                       type: string
+ *       404:
+ *         description: پیدا نشدن دسته بندی
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "دسته بندی پیدا نشد"       
+ *       401:
+ *         description: کاربر احراز هویت نشده
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "لطفا اول نسبت به احراز هویت اقدام نمایید"
+ */
 router.get("/", getAllCategory);
 
 module.exports = router;

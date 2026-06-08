@@ -38,7 +38,7 @@ exports.createCategory = async (req, res) => {
   }
 };
 
-exports.updateCategory = async (req, res) => {
+exports.editCategory = async (req, res) => {
   try {
     const { oldSlug, newName, newSlug } = req.body;
 
@@ -65,7 +65,7 @@ exports.updateCategory = async (req, res) => {
     }
 
     return res.status(200).json({
-      message: "دسته بندی با موفقیت بروزرسانی شد",
+      message: "دسته بندی با موفقیت ویرایش شد",
     });
   } catch (e) {
     return res.status(500).json({
