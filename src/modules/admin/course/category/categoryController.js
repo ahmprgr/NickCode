@@ -9,7 +9,7 @@ exports.createCategory = async (req, res) => {
       const category = await categoryModel.create({
         name,
         slug,
-        author: req.session.user._id,
+        author: req.session.user,
       });
       const categoryObj = category.toObject();
       Reflect.deleteProperty(categoryObj, "createdAt");
@@ -17,6 +17,7 @@ exports.createCategory = async (req, res) => {
       Reflect.deleteProperty(categoryObj, "students");
       Reflect.deleteProperty(categoryObj, "courses");
       Reflect.deleteProperty(categoryObj, "educationalArticles");
+      Reflect.deleteProperty(categoryObj, "author");
       Reflect.deleteProperty(categoryObj, "_id");
       Reflect.deleteProperty(categoryObj, "__v");
       return res.json({

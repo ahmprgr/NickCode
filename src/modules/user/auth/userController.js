@@ -16,6 +16,7 @@ exports.register = async (req, res) => {
             fullname,
             email,
             password: hashedPassword,
+            userid: userCount >= 2 ? `user_${email}` : `admin_${email}`,
             ...userModel.userid,
             role: userCount >= 2 ? "user" : "admin",
           });

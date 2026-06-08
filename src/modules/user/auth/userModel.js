@@ -19,7 +19,6 @@ const schema = new mongoose.Schema(
     },
     userid: {
       type: String,
-      default: `user_${Date.now()}`,
     },
     courses: {
       type: mongoose.Types.ObjectId,
