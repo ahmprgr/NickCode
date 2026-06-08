@@ -28,7 +28,7 @@ const router = express.Router();
  *       - sessionAuth: []
  *     responses:
  *       200:
- *         description: موفق - اطلاعات کاربر دریافت شد
+ *         description: اطلاعات کاربر دریافت شد
  *         content:
  *           application/json:
  *             schema:
@@ -48,7 +48,7 @@ const router = express.Router();
  *                     role:
  *                       type: string
  *       401:
- *         description: خطا - کاربر احراز هویت نشده
+ *         description: کاربر احراز هویت نشده
  *         content:
  *           application/json:
  *             schema:
@@ -58,7 +58,7 @@ const router = express.Router();
  *                   type: string
  *                   example: "لطفا اول نسبت به احراز هویت اقدام نمایید"
  */
-router.get("/me",getMe)
+router.get("/me",authGuard,getMe)
 
 /**
  * @swagger
@@ -315,7 +315,7 @@ router.put(
  *                   type: string
  *                   example: "لطفا اول نسبت به احراز هویت اقدام نمایید"
  */
-router.delete("/deleteaccount", deleteAccount);
+router.delete("/deleteaccount",authGuard, deleteAccount);
 
 /**
  * @swagger
@@ -347,6 +347,6 @@ router.delete("/deleteaccount", deleteAccount);
  *                   type: string
  *                   example: "لطفا اول نسبت به احراز هویت اقدام نمایید"
  */
-router.post("/logout", logout);
+router.post("/logout", authGuard,logout);
 
 module.exports = router;

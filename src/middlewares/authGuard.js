@@ -4,7 +4,7 @@ const authGuard = (req, res, next) => {
       next();
     } else {
       return res.status(401).json({
-        message: "unAuthorized!!",
+        message: "لطفا اول نسبت به احراز هویت اقدام نمایید",
       });
     }
   } catch (e) {

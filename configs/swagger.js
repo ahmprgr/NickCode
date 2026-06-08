@@ -24,7 +24,7 @@ const options = {
     ],
   },
   apis: [
-    path.join(rootPath, "src/modules/**/*.js")
+    path.join(rootPath, "src/**/*.js"),
   ],
 };
 

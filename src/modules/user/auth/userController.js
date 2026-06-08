@@ -19,7 +19,7 @@ exports.register = async (req, res) => {
             ...userModel.userid,
             role: userCount >= 2 ? "user" : "admin",
           });
-          req.session.user = user._id;
+          req.session.user = user;
           const userObj = user.toObject();
           Reflect.deleteProperty(userObj, "password");
           Reflect.deleteProperty(userObj, "createdAt");
@@ -81,150 +81,126 @@ exports.login = async (req, res) => {
   }
 };
 exports.deleteAccount = async (req, res) => {
-  if (req.session.user) {
-    try {
-      await userModel.deleteOne({ _id: req.session.user });
-      req.session.destroy((err) => {
-        if (err) {
-          return res.status(500).json({
-            message: "خروج موفق نبود",
-          });
-        }
-      });
-      res.clearCookie("connect.sid");
-      return res.json({
-        message: "حساب کاربری شما با موفقیت حذف شد",
-      });
-    } catch (e) {
-      return res.status(500).json({
-        message: "internal server error",
-        error: e.message,
-      });
-    }
-  } else {
-    return res.status(401).json({
-      message: "لطفا اول نسبت به احراز هویت اقدام نمایید",
+  try {
+    await userModel.deleteOne({ _id: req.session.user });
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({
+          message: "خروج موفق نبود",
+        });
+      }
+    });
+    res.clearCookie("connect.sid");
+    return res.json({
+      message: "حساب کاربری شما با موفقیت حذف شد",
+    });
+  } catch (e) {
+    return res.status(500).json({
+      message: "internal server error",
+      error: e.message,
     });
   }
 };
 exports.editProfile = async (req, res) => {
-  if (req.session.user) {
-    try {
-      const user = await userModel.findById(req.session.user);
-      const { newFullname, newPassword, newEmail, userId } = req.body;
-      const profile = req.file
-        ? `/uploads/img/${req.file.filename}`
-        : user.profile;
+  try {
+    const user = await userModel.findById(req.session.user);
+    const { newFullname, newPassword, newEmail, userId } = req.body;
+    const profile = req.file
+      ? `/uploads/img/${req.file.filename}`
+      : user.profile;
 
-      const isDuplicatedEmail = await userModel.findOne({
-        newEmail,
-        _id: { $ne: user._id },
-      });
+    const isDuplicatedEmail = await userModel.findOne({
+      newEmail,
+      _id: { $ne: user._id },
+    });
 
-      const isDuplicatedUserId = await userModel.findOne({
-        userId,
-        _id: { $ne: user._id },
-      });
+    const isDuplicatedUserId = await userModel.findOne({
+      userId,
+      _id: { $ne: user._id },
+    });
 
-      if (!isDuplicatedEmail && !isDuplicatedUserId) {
-        if (req.file && user.profile) {
-          const oldProfilePath = path.join(
-            __dirname,
-            "..",
-            "..",
-            "..",
-            "public",
-            user.profile.startsWith("/") ? user.profile.slice(1) : user.profile,
-          );
-          fs.unlink(oldProfilePath, (e) => {
-            if (e) console.log(e);
-          });
-        }
-
-        const hashedPassword = await bcrypt.hash(newPassword, 12);
-
-        const newUserInfo = await userModel.updateOne(
-          { _id: user._id },
-          {
-            $set: {
-              userid: userId,
-              email: newEmail,
-              fullname: newFullname,
-              password: hashedPassword,
-              profile,
-            },
-          },
+    if (!isDuplicatedEmail && !isDuplicatedUserId) {
+      if (req.file && user.profile) {
+        const oldProfilePath = path.join(
+          __dirname,
+          "..",
+          "..",
+          "..",
+          "public",
+          user.profile.startsWith("/") ? user.profile.slice(1) : user.profile,
         );
-        return res.json({
-          message: "پروفایل با موفقیت بروزرسانی شد",
-        });
-      } else {
-        return res.status(409).json({
-          message: "شناسه کاربری یا ایمیل تکراری میباشد",
+        fs.unlink(oldProfilePath, (e) => {
+          if (e) console.log(e);
         });
       }
-    } catch (e) {
-      return res.status(500).json({
-        message: "internal server error",
-        error: e.message,
+
+      const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+      const newUserInfo = await userModel.updateOne(
+        { _id: user._id },
+        {
+          $set: {
+            userid: userId,
+            email: newEmail,
+            fullname: newFullname,
+            password: hashedPassword,
+            profile,
+          },
+        },
+      );
+      return res.json({
+        message: "پروفایل با موفقیت بروزرسانی شد",
+      });
+    } else {
+      return res.status(409).json({
+        message: "شناسه کاربری یا ایمیل تکراری میباشد",
       });
     }
-  } else {
-    return res.status(401).json({
-      message: "لطفا اول نسبت به احراز هویت اقدام نمایید",
+  } catch (e) {
+    return res.status(500).json({
+      message: "internal server error",
+      error: e.message,
     });
   }
 };
 exports.logout = async (req, res) => {
-  if (req.session.user) {
-    try {
-      req.session.destroy((err) => {
-        if (err) {
-          return res.status(500).json({
-            message: "خروج موفق نبود",
-          });
-        }
-      });
-      res.clearCookie("connect.sid");
-      return res.json({
-        message: "شما با موفقیت خارج شده اید",
-      });
-    } catch (e) {
-      return res.status(500).json({
-        message: "internal server error",
-        error: e.message,
-      });
-    }
-  } else {
-    return res.status(401).json({
-      message: "لطفا اول نسبت به احراز هویت اقدام نمایید",
+  try {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({
+          message: "خروج موفق نبود",
+        });
+      }
+    });
+    res.clearCookie("connect.sid");
+    return res.json({
+      message: "شما با موفقیت خارج شده اید",
+    });
+  } catch (e) {
+    return res.status(500).json({
+      message: "internal server error",
+      error: e.message,
     });
   }
 };
 exports.getMe = async (req, res) => {
-  if (req.session.user) {
-    try {
-      const userId = req.session.user;
-      const userInfo = await userModel.findOne({ _id: userId });
-      const userObj = userInfo.toObject();
-          Reflect.deleteProperty(userObj, "password");
-          Reflect.deleteProperty(userObj, "createdAt");
-          Reflect.deleteProperty(userObj, "updatedAt");
-          Reflect.deleteProperty(userObj, "_id");
-          Reflect.deleteProperty(userObj, "__v");
-      return res.json({
-        message:"اطلاعات کاربر با موفقیت دریافت شد",
-        user: userObj,
-      });
-    } catch (e) {
-      return res.status(500).json({
-        message: "internal server error",
-        error: e.message,
-      });
-    }
-  } else {
-    return res.status(401).json({
-      message: "لطفا اول نسبت به احراز هویت اقدام نمایید",
+  try {
+    const userId = req.session.user;
+    const userInfo = await userModel.findOne({ _id: userId });
+    const userObj = userInfo.toObject();
+    Reflect.deleteProperty(userObj, "password");
+    Reflect.deleteProperty(userObj, "createdAt");
+    Reflect.deleteProperty(userObj, "updatedAt");
+    Reflect.deleteProperty(userObj, "_id");
+    Reflect.deleteProperty(userObj, "__v");
+    return res.json({
+      message: "اطلاعات کاربر با موفقیت دریافت شد",
+      user: userObj,
+    });
+  } catch (e) {
+    return res.status(500).json({
+      message: "internal server error",
+      error: e.message,
     });
   }
 };

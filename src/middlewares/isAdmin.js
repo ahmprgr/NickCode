@@ -9,7 +9,7 @@ const isAdmin = async (req, res, next) => {
       next();
     } else {
       return res.status(403).json({
-        message: "forbidden!!",
+        message: "شما نمیتوانید به این صفحه وارد شوید",
       });
     }
   } catch (e) {
