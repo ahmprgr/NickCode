@@ -1,5 +1,5 @@
-const categoryModel = require("./../modules/admin/course/category/categoryModel");
-const userModel = require("./../modules/user/auth/userModel");
+const categoryModel = require("../modules/admin/course/category/categoryModel");
+const userModel = require("../modules/user/auth/userModel");
 
 /**
  * @swagger
@@ -20,9 +20,9 @@ const userModel = require("./../modules/user/auth/userModel");
  *             schema:
  *               type: object
  *               properties:
- *                 message: 
+ *                 message:
  *                   type: string
- *                   example: "اطلاعات با موفقیت دریافت شد" 
+ *                   example: "اطلاعات با موفقیت دریافت شد"
  *                 user:
  *                   type: object
  *                   properties:
@@ -37,16 +37,16 @@ const userModel = require("./../modules/user/auth/userModel");
  *                     author:
  *                       type: number
  *       404:
- *         message: 
+ *         message:
  *           description: دریافت موفقیت آمیز اطلاعات دسته بندی ها
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 message: 
+ *                 message:
  *                   type: string
- *                   example: "دسته بندی پیدا نشد"  
+ *                   example: "دسته بندی پیدا نشد"
  */
 exports.getAllOrByAthorId = async (req, res) => {
   try {
@@ -103,7 +103,7 @@ exports.getAllOrByAthorId = async (req, res) => {
       });
     }
   }
-}
+};
 
 /**
  * @swagger
@@ -180,4 +180,4 @@ exports.getBySlug = async (req, res) => {
       error: e.message,
     });
   }
-}
+};
