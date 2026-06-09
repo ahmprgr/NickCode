@@ -226,6 +226,9 @@ router.delete("/delete", deleteCategory);
  *             schema:
  *               type: object
  *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "اطلاعات با موفقیت دریافت شد"
  *                 user:
  *                   type: object
  *                   properties:

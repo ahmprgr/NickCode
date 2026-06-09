@@ -45,19 +45,69 @@ app.use("/api/auth", authRouter);
 app.use("/api/admin/categories", authGuard, isAdmin, categoryRouter);
 
 //* get all categories, by slug and by author
-//get all and by author
+//get all or by author
+/**
+ * @swagger
+ * /api/categories:
+ *   get:
+ *     summary: دریافت دسته بندی‌ها
+ *     tags: [category]
+ *     parameters:
+ *       - in: query
+ *         name: authorId
+ *         schema: { type: string }
+ *         description: آیدی نویسنده (اختیاری)
+ *     responses:
+ *       200:
+ *         description: دریافت موفقیت آمیز اطلاعات دسته بندی ها
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message: 
+ *                   type: string
+ *                   example: "اطلاعات با موفقیت دریافت شد" 
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     slug:
+ *                       type: string
+ *                     courses:
+ *                       type: number
+ *                     educationalArticles:
+ *                       type: number
+ *                     author:
+ *                       type: number
+ *       404:
+ *         message: 
+ *           description: دریافت موفقیت آمیز اطلاعات دسته بندی ها
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message: 
+ *                   type: string
+ *                   example: "دسته بندی پیدا نشد"  
+ */
 app.get("/api/categories", async (req, res) => {
   try {
     const { authorId } = req.query;
     const isUserExists = await userModel.findOne({ userid: authorId });
     if (isUserExists) {
-      const findCategoryByAuthorId = await categoryModel.find({
-        author: isUserExists._id,
-      }).lean();
+      const findCategoryByAuthorId = await categoryModel
+        .find({
+          author: isUserExists._id,
+        })
+        .lean();
       if (findCategoryByAuthorId) {
         findCategoryByAuthorId.forEach((cat) => {
           Reflect.deleteProperty(cat, "createdAt");
           Reflect.deleteProperty(cat, "updatedAt");
+          Reflect.deleteProperty(cat, "author");
           Reflect.deleteProperty(cat, "_id");
           Reflect.deleteProperty(cat, "__v");
         });
@@ -76,6 +126,7 @@ app.get("/api/categories", async (req, res) => {
         categories.forEach((cat) => {
           Reflect.deleteProperty(cat, "createdAt");
           Reflect.deleteProperty(cat, "updatedAt");
+          Reflect.deleteProperty(cat, "author");
           Reflect.deleteProperty(cat, "_id");
           Reflect.deleteProperty(cat, "__v");
         });
@@ -100,6 +151,55 @@ app.get("/api/categories", async (req, res) => {
 });
 
 //by slug
+/**
+ * @swagger
+ * /api/categories/{slug}:
+ *   get:
+ *     summary: دریافت اطلاعات یک دسته بندی بوسیله آدرس دسته بندی
+ *     tags: [category]
+ *     parameters:
+ *       - in: path
+ *         name: slug
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: آدرس دسته بندی
+ *         example: "programming"
+ *     responses:
+ *       200:
+ *         description: اطلاعات با موفقیت دریافت شد
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "اطلاعات با موفقیت دریافت شد"
+ *                 categoryObj:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     slug:
+ *                       type: string
+ *                     students:
+ *                       type: number
+ *                     courses:
+ *                       type: number
+ *                     educationalArticles:
+ *                       type: number
+ *       404:
+ *         description: دسته بندی پیدا نشد
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "دسته بندی پیدا نشد"
+ */
 app.get("/api/categories/:slug", async (req, res) => {
   try {
     const slug = req.params.slug;
@@ -108,6 +208,7 @@ app.get("/api/categories/:slug", async (req, res) => {
       const categoryObj = findCategoryBySlug.toObject();
       Reflect.deleteProperty(categoryObj, "createdAt");
       Reflect.deleteProperty(categoryObj, "updatedAt");
+      Reflect.deleteProperty(categoryObj, "author");
       Reflect.deleteProperty(categoryObj, "_id");
       Reflect.deleteProperty(categoryObj, "__v");
       return res.json({
@@ -126,5 +227,6 @@ app.get("/api/categories/:slug", async (req, res) => {
     });
   }
 });
+//end of get all categories, by slug and by author
 
 module.exports = app;
