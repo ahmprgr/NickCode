@@ -10,9 +10,12 @@ const { secretKey, dbURI } = require("./../configs/env.js");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./../configs/swagger.js");
 const categoryRouter = require("./modules/admin/course/category/categoryRouter.js");
-const { getAllOrByAthorId, getBySlug } = require("./publicFuncs/getCategory.js");
+const {
+  getAllOrByAthorId,
+  getBySlug,
+} = require("./publicFuncs/getCategory.js");
 const courseRouter = require("./modules/admin/course/courses/coursesRouter.js");
-const path = require("path")
+const path = require("path");
 
 const app = express();
 
@@ -35,7 +38,10 @@ app.use(
     }),
   }),
 );
-app.use("/api/uploads", express.static(path.join(__dirname, "public", "uploads")));
+app.use(
+  "/api/uploads",
+  express.static(path.join(__dirname, "public", "uploads")),
+);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(helmet());
@@ -45,6 +51,7 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 //* router
 app.use("/api/auth", authRouter);
 app.use("/api/admin/categories", authGuard, isAdmin, categoryRouter);
+app.use("/api/admin/courses", authGuard, isAdmin, courseRouter);
 //* public endpoints
 //get category
 app.get("/api/categories", getAllOrByAthorId);

@@ -22,6 +22,7 @@ const schema = new mongoose.Schema(
     },
     courses: {
       type: mongoose.Types.ObjectId,
+      ref: "courses"
     },
     role: {
       type: String,

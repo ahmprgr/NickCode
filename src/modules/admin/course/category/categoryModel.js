@@ -27,6 +27,7 @@ const schema = mongoose.Schema(
     },
     author: {
       type: mongoose.Types.ObjectId,
+      ref: "users",
     },
   },
   {
