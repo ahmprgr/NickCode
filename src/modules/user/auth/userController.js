@@ -111,7 +111,7 @@ exports.editProfile = async (req, res) => {
       : user.profile;
 
     const isDuplicatedEmail = await userModel.findOne({
-      newEmail,
+      email: newEmail,
       _id: { $ne: user._id },
     });
 
