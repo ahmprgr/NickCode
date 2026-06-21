@@ -30,6 +30,9 @@ exports.createCourse = async (req, res) => {
       Reflect.deleteProperty(courseObj, "_id");
       Reflect.deleteProperty(courseObj, "__v");
       Reflect.deleteProperty(courseObj, "createdAt");
+      Reflect.deleteProperty(courseObj, "rating");
+      Reflect.deleteProperty(courseObj, "students");
+      Reflect.deleteProperty(courseObj, "commentCount");
       Reflect.deleteProperty(courseObj, "updatedAt");
       return res.status(201).json({
         message: "دوره جدید با موفقیت ساخته شد",
