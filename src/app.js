@@ -14,6 +14,7 @@ const {
   getAllOrByAthorId,
   getBySlug,
 } = require("./publicFuncs/getCategory.js");
+const { getCourses, getCourseBySlug } = require("./publicFuncs/getCourse.js");
 const courseRouter = require("./modules/admin/course/courses/coursesRouter.js");
 const path = require("path");
 
@@ -56,5 +57,7 @@ app.use("/api/admin/courses", authGuard, isAdmin, courseRouter);
 //get category
 app.get("/api/categories", getAllOrByAthorId);
 app.get("/api/categories/:slug", getBySlug);
+app.get("/api/courses/",getCourses)
+app.get("/api/courses/:slug",getCourseBySlug)
 
 module.exports = app;
