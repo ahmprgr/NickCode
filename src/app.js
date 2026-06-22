@@ -13,8 +13,8 @@ const categoryRouter = require("./modules/admin/course/category/categoryRouter.j
 const {
   getAllOrByAthorId,
   getBySlug,
-} = require("./publicFuncs/getCategory.js");
-const { getCourses, getCourseBySlug } = require("./publicFuncs/getCourse.js");
+} = require("./modules/publicFuncs/getCategory.js");
+const { getCourses, getCourseBySlug } = require("./modules/publicFuncs/getCourse.js");
 const courseRouter = require("./modules/admin/course/courses/coursesRouter.js");
 const path = require("path");
 
