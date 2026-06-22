@@ -3,7 +3,7 @@ const {
   createCategory,
   editCategory,
   deleteCategory,
-  getAllCategory,
+  getAllCategoryByAuthor,
 } = require("./categoryController.js");
 const validator = require("../../../../middlewares/validator.js");
 const {
@@ -284,6 +284,6 @@ router.delete("/delete", deleteCategory);
  *                   type: string
  *                   example: "لطفا اول نسبت به احراز هویت اقدام نمایید"
  */
-router.get("/", getAllCategory);
+router.get("/", getAllCategoryByAuthor);
 
 module.exports = router;

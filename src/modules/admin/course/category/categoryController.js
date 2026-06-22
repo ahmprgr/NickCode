@@ -111,7 +111,7 @@ exports.deleteCategory = async (req, res) => {
   }
 };
 
-exports.getAllCategory = async (req, res) => {
+exports.getAllCategoryByAuthor = async (req, res) => {
   try {
     const categories = await categoryModel
       .find({ author: req.session.user })
@@ -119,6 +119,7 @@ exports.getAllCategory = async (req, res) => {
     if (categories.length) {
       categories.forEach((cat) => {
         Reflect.deleteProperty(cat, "createdAt");
+        Reflect.deleteProperty(cat, "author");
         Reflect.deleteProperty(cat, "updatedAt");
         Reflect.deleteProperty(cat, "_id");
         Reflect.deleteProperty(cat, "__v");
