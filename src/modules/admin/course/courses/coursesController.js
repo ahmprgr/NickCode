@@ -1,5 +1,5 @@
 const courseModel = require("./coursesModel");
-const userModel = require("./../../../user/auth/userModel");
+const categoryModel = require("./../../../admin/course/category/categoryModel");
 const fs = require("fs");
 const path = require("path");
 
@@ -15,28 +15,44 @@ exports.createCourse = async (req, res) => {
         message: "آدرس دوره یا عنوان آن تکراری میباشد",
       });
     } else {
-      const prerequisitesArr = prerequisites.split(",");
-      const course = await courseModel.create({
-        title,
-        cover: coverImage,
-        slug,
-        description,
-        prerequisites: prerequisitesArr,
-        category,
-        author: req.session.user,
-        coverImage,
-      });
-      const courseObj = course.toObject();
-      Reflect.deleteProperty(courseObj, "_id");
-      Reflect.deleteProperty(courseObj, "__v");
-      Reflect.deleteProperty(courseObj, "createdAt");
-      Reflect.deleteProperty(courseObj, "rating");
-      Reflect.deleteProperty(courseObj, "students");
-      Reflect.deleteProperty(courseObj, "commentCount");
-      Reflect.deleteProperty(courseObj, "updatedAt");
-      return res.status(201).json({
-        message: "دوره جدید با موفقیت ساخته شد",
-        courseObj,
+      const isCategoryExists = await categoryModel.findOne({ _id: category });
+      if (isCategoryExists) {
+        const prerequisitesArr = prerequisites.split(",");
+        const course = await courseModel.create({
+          title,
+          cover: coverImage,
+          slug,
+          description,
+          prerequisites: prerequisitesArr,
+          category,
+          author: req.session.user,
+          coverImage,
+        });
+        const courseObj = course.toObject();
+        Reflect.deleteProperty(courseObj, "_id");
+        Reflect.deleteProperty(courseObj, "__v");
+        Reflect.deleteProperty(courseObj, "createdAt");
+        Reflect.deleteProperty(courseObj, "rating");
+        Reflect.deleteProperty(courseObj, "students");
+        Reflect.deleteProperty(courseObj, "commentCount");
+        Reflect.deleteProperty(courseObj, "updatedAt");
+        await categoryModel.updateOne(
+          { _id: category },
+          {
+            $set: {
+              courses: isCategoryExists.courses += 1,
+            },
+          },
+        );
+        return res.status(201).json({
+          message: "دوره جدید با موفقیت ساخته شد",
+          courseObj,
+        });
+      }
+      console.log(isCategoryExists);
+
+      return res.status(400).json({
+        message: "دسته بندی ای با این شناسه وجود ندارد",
       });
     }
   } catch (e) {
