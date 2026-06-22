@@ -27,5 +27,12 @@
 ```bash
 git clone https://github.com/ahmprgr/NickCode.git
 cd NickCode
+cd src
+mkdir public
+cd public
+mkdir uploads
+cd uploads
+mkdir img
+cd ./../../../
 npm install
 npm run start:dev
