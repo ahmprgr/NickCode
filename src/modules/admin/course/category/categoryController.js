@@ -113,7 +113,9 @@ exports.deleteCategory = async (req, res) => {
 
 exports.getAllCategory = async (req, res) => {
   try {
-    const categories = await categoryModel.find().lean();
+    const categories = await categoryModel
+      .find({ author: req.session.user })
+      .lean();
     if (categories.length) {
       categories.forEach((cat) => {
         Reflect.deleteProperty(cat, "createdAt");
@@ -128,7 +130,7 @@ exports.getAllCategory = async (req, res) => {
       });
     } else {
       return res.status(404).json({
-        message: "دسته بندی پیدا نشد",
+        message: "در حال حاضر دسته بندی ای مربوط به شما برای نمایش وجود ندارد",
       });
     }
   } catch (e) {

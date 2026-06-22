@@ -152,6 +152,16 @@ router.post("/create", validator(categoryValidationSchema), createCategory);
  *                 message:
  *                   type: string
  *                   example: "لطفا اول نسبت به احراز هویت اقدام نمایید"
+ *       403:
+ *         description: سازنده این دسته بندی این کاربر نیست و نمیتواند آنرا ویرایش کند
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "شما قادر به ویرایش این دسته بندی نخواهید بود"
  */
 router.put("/edit", validator(categoryUpdateValidationSchema), editCategory);
 
@@ -208,14 +218,24 @@ router.put("/edit", validator(categoryUpdateValidationSchema), editCategory);
  *                 message:
  *                   type: string
  *                   example: "لطفا اول نسبت به احراز هویت اقدام نمایید"
- */
+ *       403:
+ *         description: سازنده این دسته بندی این کاربر نیست و نمیتواند آنرا حذف کند
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "شما قادر به حذف این دسته بندی نخواهید بود"
+ */      
 router.delete("/delete", deleteCategory);
 
 /**
  * @swagger
  * /api/admin/categories/:
  *   get:
- *     summary: دریافت اطلاعات تمامی دسته بندی ها
+ *     summary: دریافت اطلاعات تمامی دسته بندی های ساخته شده توسط کاربر
  *     tags: [category]
  *     security:
  *       - sessionAuth: []
@@ -244,7 +264,7 @@ router.delete("/delete", deleteCategory);
  *                     author:
  *                       type: string
  *       404:
- *         description: پیدا نشدن دسته بندی
+ *         description: پیدا نشدن دسته بندی ساخته شده توسط کاربر
  *         content:
  *           application/json:
  *             schema:
@@ -252,7 +272,7 @@ router.delete("/delete", deleteCategory);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "دسته بندی پیدا نشد"       
+ *                   example: "در حال حاضر دسته بندی ای مربوط به شما برای نمایش وجود ندارد"       
  *       401:
  *         description: کاربر احراز هویت نشده
  *         content:
