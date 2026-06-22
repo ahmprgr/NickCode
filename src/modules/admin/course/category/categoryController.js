@@ -53,20 +53,26 @@ exports.editCategory = async (req, res) => {
         message: "نام دسته بندی یا آدرس دسته بندی تکراری میباشد",
       });
     }
+    const categoryAuthor = await categoryModel.findOne({ slug: oldSlug });
 
-    const result = await categoryModel.updateOne(
-      { slug: oldSlug },
-      { $set: { name: newName, slug: newSlug } },
-    );
+    if (categoryAuthor.author.equals(req.session.user)) {
+      const result = await categoryModel.updateOne(
+        { slug: oldSlug },
+        { $set: { name: newName, slug: newSlug } },
+      );
 
-    if (result.matchedCount === 0) {
-      return res.status(404).json({
-        message: "دسته بندی پیدا نشد",
+      if (result.matchedCount === 0) {
+        return res.status(404).json({
+          message: "دسته بندی پیدا نشد",
+        });
+      }
+
+      return res.status(200).json({
+        message: "دسته بندی با موفقیت ویرایش شد",
       });
     }
-
-    return res.status(200).json({
-      message: "دسته بندی با موفقیت ویرایش شد",
+    return res.status(403).json({
+      message: "شما قادر به ویرایش این دسته بندی نخواهید بود",
     });
   } catch (e) {
     return res.status(500).json({
@@ -81,9 +87,14 @@ exports.deleteCategory = async (req, res) => {
     const id = req.body.id;
     const findCategory = await categoryModel.findOne({ _id: id });
     if (findCategory) {
-      await categoryModel.deleteOne({ _id: id });
-      return res.json({
-        message: "دسته بندی با موفقیت حذف شد",
+      if (findCategory.author.equals(req.session.user)) {
+        await categoryModel.deleteOne({ _id: id });
+        return res.json({
+          message: "دسته بندی با موفقیت حذف شد",
+        });
+      }
+      return res.status(403).json({
+        message: "شما قادر به حذف این دسته بندی نخواهید بود",
       });
     } else {
       return res.status(404).json({

@@ -174,6 +174,7 @@ router.put("/edit", validator(categoryUpdateValidationSchema), editCategory);
  *                 type: string
  *                 format: ObjectId
  *                 description: شناسه دسته بندی مورد نظر
+ *                 example: "65f2a1b3c4d5e6f7a8b9c0d1"
  *             required:
  *               - id
  *     responses:
