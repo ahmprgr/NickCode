@@ -75,13 +75,12 @@ exports.editCourse = async (req, res) => {
           message: "آدرس دوره یا عنوان آن تکراری میباشد",
         });
       } else {
-        const isAuthor = currentCourse.author.equals(req.session.user)
+        const isAuthor = currentCourse.author.equals(req.session.user);
         if (!isAuthor) {
           return res.status(403).json({
-            message:"شما قادر به ویرایش این دوره نخواهید بود"
-          })
+            message: "شما قادر به ویرایش این دوره نخواهید بود",
+          });
         } else {
-
         }
         if (req.file && currentCourse.coverImage) {
           const oldCoverPath = path.join(
@@ -141,6 +140,18 @@ exports.deleteCourse = async (req, res) => {
           message: "شما قادر به حذف این دوره نخواهید بود",
         });
       } else {
+        const coverPath = path.join(
+          __dirname,
+          "..",
+          "..",
+          "..",
+          "..",
+          "public",
+          course.coverImage,
+        );
+        fs.unlink(coverPath, (e) => {
+          if (e) console.log(e);
+        });
         await courseModel.deleteOne({ _id: id });
         return res.json({
           message: "دوره با موفقیت حذف شد",

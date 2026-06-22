@@ -221,19 +221,15 @@ router.put(
  *     tags: [course]
  *     security:
  *       - sessionAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/x-www-form-urlencoded:
- *           schema:
- *             type: object
- *             properties:
- *               id:
- *                 type: string
- *                 format: ObjectId
- *                 description: شناسه دوره مورد نظر
- *             required:
- *               - id
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: ObjectId
+ *         description: شناسه دوره مورد نظر
+ *         example: "65f2a1b3c4d5e6f7a8b9c0d1"
  *     responses:
  *       200:
  *         description: حذف موفق

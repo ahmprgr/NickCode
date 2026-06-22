@@ -83,6 +83,7 @@ exports.login = async (req, res) => {
 };
 exports.deleteAccount = async (req, res) => {
   try {
+    const user = await userModel.findOne({ _id: req.session.user });
     await userModel.deleteOne({ _id: req.session.user });
     req.session.destroy((err) => {
       if (err) {
@@ -90,6 +91,10 @@ exports.deleteAccount = async (req, res) => {
           message: "خروج موفق نبود",
         });
       }
+    });
+    const profilePath = path.join(__dirname, "..", "..","..", user.profile);
+    fs.unlink(profilePath, (err) => {
+      if (err) console.log(err);
     });
     res.clearCookie("connect.sid");
     return res.json({
