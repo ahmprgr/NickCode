@@ -40,7 +40,7 @@ exports.createCourse = async (req, res) => {
           { _id: category },
           {
             $set: {
-              courses: isCategoryExists.courses += 1,
+              courses: (isCategoryExists.courses += 1),
             },
           },
         );
@@ -186,4 +186,31 @@ exports.deleteCourse = async (req, res) => {
   }
 };
 
-exports.getAllCourse = async (req, res) => {};
+exports.getAllCourseByCurrentAuthor = async (req, res) => {
+  try {
+    const getCoursesByCurrentAuthor = await courseModel
+      .find({ author: req.session.user })
+      .lean();
+    if (getCoursesByCurrentAuthor.length) {
+      getCoursesByCurrentAuthor.forEach((course) => {
+        Reflect.deleteProperty(course, "_id");
+        Reflect.deleteProperty(course, "__v");
+        Reflect.deleteProperty(course, "createdAt");
+        Reflect.deleteProperty(course, "author");
+        Reflect.deleteProperty(course, "updatedAt");
+      })
+      return res.json({
+        message:"اطلاعات با موفقیت دریافت شد",
+        coursesObj: getCoursesByCurrentAuthor
+      })
+    }
+    return res.starus(404).json({
+      message:"در حال حاضر دوره ای برای نشان دادن وجود ندارد"
+    })
+  } catch (e) {
+    return res.status(500).json({
+      message: "internal server error",
+      error: e.message,
+    });
+  }
+};

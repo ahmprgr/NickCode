@@ -3,7 +3,7 @@ const {
   createCourse,
   editCourse,
   deleteCourse,
-  getAllCourse,
+  getAllCourseByCurrentAuthor,
 } = require("./coursesController");
 const upload = require("./../../../../middlewares/upload/imgUploader");
 const {
@@ -312,7 +312,7 @@ router.delete("/delete", deleteCourse);
  *                     commentCount:
  *                       type: number
  *       404:
- *         description: پیدا نشدن دسته بندی
+ *         description: پیدا نشدن دوره مرتبط
  *         content:
  *           application/json:
  *             schema:
@@ -320,7 +320,7 @@ router.delete("/delete", deleteCourse);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "دسته بندی پیدا نشد"       
+ *                   example: "در حال حاضر دوره ای برای نشان دادن وجود ندارد"       
  *       401:
  *         description: کاربر احراز هویت نشده
  *         content:
@@ -333,6 +333,6 @@ router.delete("/delete", deleteCourse);
  *                   example: "لطفا اول نسبت به احراز هویت اقدام نمایید"
  */
 
-router.get("/", getAllCourse);
+router.get("/", getAllCourseByCurrentAuthor);
 
 module.exports = router;
