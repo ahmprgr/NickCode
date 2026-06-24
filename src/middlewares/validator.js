@@ -11,9 +11,12 @@ const validator = (schema) => {
       });
       next();
     } catch (err) {
-      fs.unlink(req.file.path, (e) => {
-        if (e) console.log(e);
-      });
+      if (req.file) {
+        fs.unlink(req.file.path, (e) => {
+          if (e) console.log(e);
+        });
+      }
+
       return res.status(500).json({ message: err.errors });
     }
   };
