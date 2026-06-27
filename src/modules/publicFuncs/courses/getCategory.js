@@ -1,5 +1,5 @@
-const categoryModel = require("./../admin/course/category/categoryModel");
-const userModel = require("./../user/auth/userModel");
+const categoryModel = require("./../../admin/course/category/categoryModel");
+const userModel = require("./../../user/auth/userModel");
 
 /**
  * @swagger

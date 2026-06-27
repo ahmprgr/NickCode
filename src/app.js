@@ -13,12 +13,12 @@ const categoryRouter = require("./modules/admin/course/category/categoryRouter.j
 const {
   getAllOrByAthorId,
   getBySlug,
-} = require("./modules/publicFuncs/getCategory.js");
-const { getAllChapters } = require("./modules/publicFuncs/getChapter.js")
+} = require("./modules/publicFuncs/courses/getCategory.js");
+const { getAllChapters } = require("./modules/publicFuncs/courses/getChapter.js")
 const {
   getCourses,
   getCourseBySlug,
-} = require("./modules/publicFuncs/getCourse.js");
+} = require("./modules/publicFuncs/courses/getCourse.js");
 const courseRouter = require("./modules/admin/course/courses/coursesRouter.js");
 const chapterRouter = require("./modules/admin/course/courses/chapters/chapterRouter.js");
 const path = require("path");

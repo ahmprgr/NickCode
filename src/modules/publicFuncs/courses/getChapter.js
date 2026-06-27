@@ -1,5 +1,5 @@
-const chapterModel = require("../admin/course/courses/chapters/chapterModel");
-const courseModel = require("../admin/course/courses/coursesModel");
+const chapterModel = require("../../admin/course/courses/chapters/chapterModel");
+const courseModel = require("../../admin/course/courses/coursesModel");
 
 exports.getAllChapters = async (req, res) => {
   try {

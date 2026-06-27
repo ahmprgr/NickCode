@@ -1,4 +1,4 @@
-const courseModel = require("../admin/course/courses/coursesModel");
+const courseModel = require("../../admin/course/courses/coursesModel");
 
 /**
  * @swagger
