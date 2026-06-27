@@ -14,6 +14,7 @@ const {
   getAllOrByAthorId,
   getBySlug,
 } = require("./modules/publicFuncs/getCategory.js");
+const { getAllChapters } = require("./modules/publicFuncs/getChapter.js")
 const {
   getCourses,
   getCourseBySlug,
@@ -64,5 +65,6 @@ app.get("/api/categories", getAllOrByAthorId);
 app.get("/api/categories/:slug", getBySlug);
 app.get("/api/courses/", getCourses);
 app.get("/api/courses/:slug", getCourseBySlug);
+app.get("/api/chapters/", getAllChapters);
 
 module.exports = app;
