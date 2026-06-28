@@ -10,8 +10,8 @@ exports.getAllChapters = async (req, res) => {
     for (const course of courses) {
       const chapters = await chapterModel
         .find({ course: course._id })
+        .select("_id title course")
         .sort({ createdAt: 1 });
-
       result.push({
         courseId: course._id,
         courseTitle: course.title,
