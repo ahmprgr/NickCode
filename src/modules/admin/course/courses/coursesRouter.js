@@ -19,7 +19,7 @@ const router = express.Router();
  * /api/admin/courses/create:
  *   post:
  *     summary: افزودن دوره
- *     tags: [course]
+ *     tags: [Course]
  *     security:
  *       - sessionAuth: []
  *     requestBody:
@@ -128,7 +128,7 @@ router.post(
  * /api/admin/courses/edit:
  *   put:
  *     summary: ویرایش دوره
- *     tags: [course]
+ *     tags: [Course]
  *     security:
  *       - sessionAuth: []
  *     requestBody:
@@ -218,7 +218,7 @@ router.put(
  * /api/admin/courses/delete:
  *   delete:
  *     summary: حذف دوره
- *     tags: [course]
+ *     tags: [Course]
  *     security:
  *       - sessionAuth: []
  *     parameters:
@@ -270,7 +270,7 @@ router.delete("/delete", deleteCourse);
  * /api/admin/courses/:
  *   get:
  *     summary: دریافت اطلاعات تمامی دوره ها
- *     tags: [course]
+ *     tags: [Course]
  *     security:
  *       - sessionAuth: []
  *     responses:

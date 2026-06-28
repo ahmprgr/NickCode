@@ -5,9 +5,7 @@ const courseModel = require("../../admin/course/courses/coursesModel");
  * /api/courses/:
  *   get:
  *     summary: دریافت اطلاعات تمامی دوره ها
- *     tags: [course]
- *     security:
- *       - sessionAuth: []
+ *     tags: [Course]
  *     responses:
  *       200:
  *         description: دریافت موفقیت آمیز اطلاعات تمامی دوره ها
@@ -74,7 +72,7 @@ exports.getCourses = async (req, res) => {
  * /api/course/{slug}:
  *   get:
  *     summary: دریافت اطلاعات یک دوره بوسیله آدرس مربوطه
- *     tags: [course]
+ *     tags: [Course]
  *     parameters:
  *       - in: path
  *         name: slug

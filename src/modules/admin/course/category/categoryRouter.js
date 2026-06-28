@@ -18,7 +18,7 @@ const router = express.Router();
  * /api/admin/categories/create:
  *   post:
  *     summary: ایجاد دسته بندی
- *     tags: [category]
+ *     tags: [Category]
  *     security:
  *       - sessionAuth: []
  *     requestBody:
@@ -85,7 +85,7 @@ router.post("/create", validator(categoryValidationSchema), createCategory);
  * /api/admin/categories/edit:
  *   put:
  *     summary: ویرایش دسته بندی
- *     tags: [category]
+ *     tags: [Category]
  *     security:
  *       - sessionAuth: []
  *     requestBody:
@@ -170,7 +170,7 @@ router.put("/edit", validator(categoryUpdateValidationSchema), editCategory);
  * /api/admin/categories/delete:
  *   delete:
  *     summary: حذف دسته بندی
- *     tags: [category]
+ *     tags: [Category]
  *     security:
  *       - sessionAuth: []
  *     requestBody:
@@ -236,7 +236,7 @@ router.delete("/delete", deleteCategory);
  * /api/admin/categories/:
  *   get:
  *     summary: دریافت اطلاعات تمامی دسته بندی های ساخته شده توسط کاربر
- *     tags: [category]
+ *     tags: [Category]
  *     security:
  *       - sessionAuth: []
  *     responses:

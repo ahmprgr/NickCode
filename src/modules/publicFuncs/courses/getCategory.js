@@ -6,7 +6,7 @@ const userModel = require("./../../user/auth/userModel");
  * /api/categories:
  *   get:
  *     summary: دریافت دسته بندی‌ها
- *     tags: [category]
+ *     tags: [Category]
  *     parameters:
  *       - in: query
  *         name: authorId
@@ -110,7 +110,7 @@ exports.getAllOrByAthorId = async (req, res) => {
  * /api/categories/{slug}:
  *   get:
  *     summary: دریافت اطلاعات یک دسته بندی بوسیله آدرس دسته بندی
- *     tags: [category]
+ *     tags: [Category]
  *     parameters:
  *       - in: path
  *         name: slug

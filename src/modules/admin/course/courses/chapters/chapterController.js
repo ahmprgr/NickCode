@@ -56,7 +56,7 @@ exports.editChapter = async (req, res) => {
     });
     if (isChapterExists) {
       return res.status(409).json({
-        message: "دوره ای با این مشخصات وجود دارد",
+        message: "فصلی با این مشخصات وجود دارد",
       });
     }
     const updateChapter = await chapterModel.updateOne(
@@ -67,7 +67,6 @@ exports.editChapter = async (req, res) => {
         },
       },
     );
-    console.log(updateChapter);
 
     if (updateChapter.matchedCount === 1) {
       return res.json({
@@ -89,7 +88,7 @@ exports.deleteChapter = async (req, res) => {
   try {
     const id = req.query.id;
     const deleteChapter = await chapterModel.deleteOne({ _id: id });
-    console.log(deleteChapter);
+
     if (deleteChapter.deletedCount === 1) {
       return res.json({
         message: "فصل شما با موفقیت حذف شد",
@@ -112,7 +111,7 @@ exports.getAllChapterByAuthor = async (req, res) => {
       author: req.session.user,
     });
 
-    const result = [];
+    const chaptersObj = [];
 
     for (const course of courses) {
       const chapters = await chapterModel
@@ -120,7 +119,7 @@ exports.getAllChapterByAuthor = async (req, res) => {
         .select("_id title course")
         .sort({ createdAt: 1 });
 
-      result.push({
+      chaptersObj.push({
         courseId: course._id,
         courseTitle: course.title,
         chapters,
@@ -129,7 +128,7 @@ exports.getAllChapterByAuthor = async (req, res) => {
 
     return res.json({
       message: "اطلاعات با موفقیت دریافت شد",
-      result,
+      chaptersObj,
     });
   } catch (e) {
     return res.status(500).json({
