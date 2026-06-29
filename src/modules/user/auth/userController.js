@@ -58,12 +58,14 @@ exports.login = async (req, res) => {
     try {
       const { email, password } = req.body;
       const user = await userModel.findOne({ email });
-      const comparePassword = await bcrypt.compare(password, user.password);
-      if (user && comparePassword) {
-        req.session.user = user._id;
-        return res.json({
-          message: "ورود موفقیت آمیز بود",
-        });
+      if (user) {
+        const comparePassword = await bcrypt.compare(password, user.password);
+        if (comparePassword) {
+          req.session.user = user._id;
+          return res.json({
+            message: "ورود موفقیت آمیز بود",
+          });
+        }
       } else {
         return res.status(422).json({
           message: "کاربری با این مشخصات وجود ندارد",
@@ -92,7 +94,7 @@ exports.deleteAccount = async (req, res) => {
         });
       }
     });
-    const profilePath = path.join(__dirname, "..", "..","..", user.profile);
+    const profilePath = path.join(__dirname, "..", "..", "..", user.profile);
     fs.unlink(profilePath, (err) => {
       if (err) console.log(err);
     });
