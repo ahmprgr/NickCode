@@ -14,13 +14,16 @@ const {
   getAllOrByAthorId,
   getBySlug,
 } = require("./modules/publicFuncs/courses/getCategory.js");
-const { getAllChapters } = require("./modules/publicFuncs/courses/getChapter.js")
+const {
+  getAllChapters,
+} = require("./modules/publicFuncs/courses/getChapter.js");
 const {
   getCourses,
   getCourseBySlug,
 } = require("./modules/publicFuncs/courses/getCourse.js");
 const courseRouter = require("./modules/admin/course/courses/coursesRouter.js");
 const chapterRouter = require("./modules/admin/course/courses/chapters/chapterRouter.js");
+const lessonRouter = require("./modules/admin/course/courses/lessons/lessonRouter.js");
 const path = require("path");
 
 const app = express();
@@ -58,7 +61,8 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/auth", authRouter);
 app.use(`${adminStaticApiUrl}/categories`, authGuard, isAdmin, categoryRouter);
 app.use(`${adminStaticApiUrl}/courses`, authGuard, isAdmin, courseRouter);
-app.use(`${adminStaticApiUrl}/chapters`, authGuard, isAdmin,chapterRouter);
+app.use(`${adminStaticApiUrl}/chapters`, authGuard, isAdmin, chapterRouter);
+app.use(`${adminStaticApiUrl}/lessons`, lessonRouter);
 //* public endpoints
 //get category
 app.get("/api/categories", getAllOrByAthorId);
