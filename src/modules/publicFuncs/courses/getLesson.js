@@ -2,6 +2,61 @@ const lessonModel = require("./../../admin/course/courses/lessons/lessonModel");
 const courseModel = require("./../../admin/course/courses/coursesModel");
 const chapterModel = require("./../../admin/course/courses/chapters/chapterModel");
 
+/**
+ * @swagger
+ * /api/courses/{courseSlug}/lessons:
+ *   get:
+ *     summary: دریافت اطلاعات تمامی درس های مرتبط با فصل آن
+ *     tags: [Lesson]
+ *     parameters:
+ *       - in: path
+ *         name: courseSlug
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: آدرس دوره مورد نظر
+ *         example: "python"
+ *     responses:
+ *       200:
+ *         description: دریافت موفقیت آمیز اطلاعات تمامی درس ها
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "اطلاعات با موفقیت دریافت شد"
+ *                 lessonsObj:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       chapterId:
+ *                         type: string
+ *                         description: شناسه فصل
+ *                         example: "65f2a1b3c4d5e6f7a8b9c0d1"
+ *                       chapterTitle:
+ *                         type: string
+ *                         description: عنوان فصل
+ *                       lessons:
+ *                         type: array
+ *                         description: لیست درس های فصل
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             _id:
+ *                               type: string
+ *                               description: شناسه درس
+ *                               example: "65f2a1b3c4d5e6f7a8b9c0d1"
+ *                             title:
+ *                               type: string
+ *                               description: عنوان درس
+ *                             content:
+ *                               type: string
+ *                               description: محتوای درس    
+ */
+
 exports.getAllLessonsInCourse = async (req, res) => {
   try {
     const { courseSlug } = req.params;
@@ -43,6 +98,53 @@ exports.getAllLessonsInCourse = async (req, res) => {
     });
   }
 };
+
+/**
+ * @swagger
+ * /api/courses/{courseSlug}/lessons/{lessonSlug}:
+ *   get:
+ *     summary: دریافت اطلاعات تمامی درس های مرتبط با فصل آن
+ *     tags: [Lesson]
+ *     parameters:
+ *       - in: path
+ *         name: courseSlug
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: آدرس دوره مورد نظر
+ *         example: "python"
+ *       - in: path
+ *         name: lesssonSlug
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: آدرس درس مورد نظر
+ *         example: "install-python"
+ *     responses:
+ *       200:
+ *         description: دریافت موفقیت آمیز اطلاعات تمامی درس ها
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "اطلاعات با موفقیت دریافت شد"
+ *                 lessonObj:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       format: ObjectId
+ *                       example: "65f2a1b3c4d5e6f7a8b9c0d1"
+ *                     title:
+ *                       type: string
+ *                     slug:
+ *                       type: string
+ *                     content:
+ *                       type: string  
+ */
 
 exports.getLessonBySlug = async (req, res) => {
   try {
