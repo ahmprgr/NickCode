@@ -25,6 +25,7 @@ const courseRouter = require("./modules/admin/course/courses/coursesRouter.js");
 const chapterRouter = require("./modules/admin/course/courses/chapters/chapterRouter.js");
 const lessonRouter = require("./modules/admin/course/courses/lessons/lessonRouter.js");
 const path = require("path");
+const { getAllLessonsInCourse, getLessonBySlug } = require("./modules/publicFuncs/courses/getLesson.js")
 
 const app = express();
 
@@ -70,5 +71,7 @@ app.get("/api/categories/:slug", getBySlug);
 app.get("/api/courses/", getCourses);
 app.get("/api/courses/:slug", getCourseBySlug);
 app.get("/api/chapters/", getAllChapters);
+app.get("/api/courses/:courseSlug/lessons",getAllLessonsInCourse)
+app.get("/api/courses/:courseSlug/lessons/:lessonSlug",getLessonBySlug)
 
 module.exports = app;
