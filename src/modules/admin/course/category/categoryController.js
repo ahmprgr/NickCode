@@ -115,16 +115,9 @@ exports.getAllCategoryByAuthor = async (req, res) => {
   try {
     const categories = await categoryModel
       .find({ author: req.session.user })
+      .select("name slug author")
       .lean();
     if (categories.length) {
-      categories.forEach((cat) => {
-        Reflect.deleteProperty(cat, "createdAt");
-        Reflect.deleteProperty(cat, "author");
-        Reflect.deleteProperty(cat, "updatedAt");
-        Reflect.deleteProperty(cat, "_id");
-        Reflect.deleteProperty(cat, "__v");
-      });
-
       return res.json({
         message: "اطلاعات با موفقیت دریافت شد",
         categories,

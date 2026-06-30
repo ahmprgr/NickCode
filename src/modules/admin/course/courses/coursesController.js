@@ -189,16 +189,9 @@ exports.deleteCourse = async (req, res) => {
 exports.getAllCourseByCurrentAuthor = async (req, res) => {
   try {
     const getCoursesByCurrentAuthor = await courseModel
-      .find({ author: req.session.user })
+      .find({ author: req.session.user }).select("-__v -createdAt -updatedAt")
       .lean();
     if (getCoursesByCurrentAuthor.length) {
-      getCoursesByCurrentAuthor.forEach((course) => {
-        Reflect.deleteProperty(course, "_id");
-        Reflect.deleteProperty(course, "__v");
-        Reflect.deleteProperty(course, "createdAt");
-        Reflect.deleteProperty(course, "author");
-        Reflect.deleteProperty(course, "updatedAt");
-      })
       return res.json({
         message:"اطلاعات با موفقیت دریافت شد",
         coursesObj: getCoursesByCurrentAuthor

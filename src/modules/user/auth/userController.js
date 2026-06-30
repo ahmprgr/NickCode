@@ -194,16 +194,13 @@ exports.logout = async (req, res) => {
 exports.getMe = async (req, res) => {
   try {
     const userId = req.session.user;
-    const userInfo = await userModel.findOne({ _id: userId });
-    const userObj = userInfo.toObject();
-    Reflect.deleteProperty(userObj, "password");
-    Reflect.deleteProperty(userObj, "createdAt");
-    Reflect.deleteProperty(userObj, "updatedAt");
-    Reflect.deleteProperty(userObj, "_id");
-    Reflect.deleteProperty(userObj, "__v");
+    const userInfo = await userModel
+      .findOne({ _id: userId })
+      .select("fullname email userid role -_id");
+
     return res.json({
       message: "اطلاعات کاربر با موفقیت دریافت شد",
-      user: userObj,
+      user: userInfo,
     });
   } catch (e) {
     return res.status(500).json({

@@ -76,15 +76,11 @@ exports.getAllOrByAthorId = async (req, res) => {
         });
       }
     } else {
-      const categories = await categoryModel.find().lean();
+      const categories = await categoryModel
+        .find()
+        .select("name slug author courses educationalArticles")
+        .lean();
       if (categories.length) {
-        categories.forEach((cat) => {
-          Reflect.deleteProperty(cat, "createdAt");
-          Reflect.deleteProperty(cat, "updatedAt");
-          Reflect.deleteProperty(cat, "author");
-          Reflect.deleteProperty(cat, "_id");
-          Reflect.deleteProperty(cat, "__v");
-        });
         return res.json({
           message: "اطلاعات با موفقیت دریافت شد",
           categories,
@@ -157,17 +153,13 @@ exports.getAllOrByAthorId = async (req, res) => {
 exports.getBySlug = async (req, res) => {
   try {
     const slug = req.params.slug;
-    const findCategoryBySlug = await categoryModel.findOne({ slug });
+    const findCategoryBySlug = await categoryModel
+      .findOne({ slug })
+      .select("-createdAt -updatedAt -__v");
     if (findCategoryBySlug) {
-      const categoryObj = findCategoryBySlug.toObject();
-      Reflect.deleteProperty(categoryObj, "createdAt");
-      Reflect.deleteProperty(categoryObj, "updatedAt");
-      Reflect.deleteProperty(categoryObj, "author");
-      Reflect.deleteProperty(categoryObj, "_id");
-      Reflect.deleteProperty(categoryObj, "__v");
       return res.json({
         message: "اطلاعات با موفقیت دریافت شد",
-        categoryObj,
+        categoryObj: findCategoryBySlug,
       });
     } else {
       return res.status(404).json({

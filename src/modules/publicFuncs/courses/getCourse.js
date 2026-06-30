@@ -48,13 +48,10 @@ const courseModel = require("../../admin/course/courses/coursesModel");
 
 exports.getCourses = async (req, res) => {
   try {
-    const allCourses = await courseModel.find().lean();
-    allCourses.forEach((course) => {
-      Reflect.deleteProperty(course, "createdAt");
-      Reflect.deleteProperty(course, "updatedAt");
-      Reflect.deleteProperty(course, "_id");
-      Reflect.deleteProperty(course, "__v");
-    });
+    const allCourses = await courseModel
+      .find()
+      .select("-createdAt -updatedAt -__v")
+      .lean();
     return res.json({
       message: "اطلاعات با موفقیت دریافت شد",
       allCourses,
@@ -69,7 +66,7 @@ exports.getCourses = async (req, res) => {
 
 /**
  * @swagger
- * /api/course/{slug}:
+ * /api/courses/{slug}:
  *   get:
  *     summary: دریافت اطلاعات یک دوره بوسیله آدرس مربوطه
  *     tags: [Course]
@@ -134,16 +131,13 @@ exports.getCourses = async (req, res) => {
 exports.getCourseBySlug = async (req, res) => {
   try {
     const slug = req.params.slug;
-    const findCourseBySlug = await courseModel.findOne({ slug });
+    const findCourseBySlug = await courseModel
+      .findOne({ slug })
+      .select("-createdAt -updatedAt -__v");
     if (findCourseBySlug) {
-      const courseObj = findCourseBySlug.toObject();
-      Reflect.deleteProperty(courseObj, "createdAt");
-      Reflect.deleteProperty(courseObj, "updatedAt");
-      Reflect.deleteProperty(courseObj, "_id");
-      Reflect.deleteProperty(courseObj, "__v");
       return res.json({
         message: "اطلاعات با موفقیت دریافت شد",
-        courseObj,
+        courseObj: findCourseBySlug,
       });
     } else {
       return res.status(404).json({
