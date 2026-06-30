@@ -59,22 +59,32 @@ exports.editChapter = async (req, res) => {
         message: "فصلی با این مشخصات وجود دارد",
       });
     }
-    const updateChapter = await chapterModel.updateOne(
-      { _id: chapterId },
-      {
-        $set: {
-          title: newTitle,
-        },
-      },
-    );
+    const currentChapter = await chapterModel.findOne({ _id: chapterId });
+    if (currentChapter) {
+      const relatedCourse = await courseModel.findOne({
+        _id: currentChapter.course,
+        author: req.session.user,
+      });
+      if (relatedCourse) {
+        await chapterModel.updateOne(
+          { _id: chapterId },
+          {
+            $set: {
+              title: newTitle,
+            },
+          },
+        );
 
-    if (updateChapter.matchedCount === 1) {
-      return res.json({
-        message: "فصل شما با موفقیت ویرایش شد",
+        return res.json({
+          message: "فصل شما با موفقیت ویرایش شد",
+        });
+      }
+      return res.status(403).json({
+        message: "شما قادر به ویرایش این فصل نخواهید بود",
       });
     }
     return res.status(404).json({
-      message: "فصلی با این مشخصات پیدا نشد",
+      message: "فصلی با این مشخصات وجود ندارد",
     });
   } catch (e) {
     return res.status(500).json({
