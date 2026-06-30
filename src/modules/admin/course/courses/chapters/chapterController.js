@@ -87,13 +87,25 @@ exports.editChapter = async (req, res) => {
 exports.deleteChapter = async (req, res) => {
   try {
     const id = req.query.id;
-    const deleteChapter = await chapterModel.deleteOne({ _id: id });
+    const currentChapter = await chapterModel.findOne({ _id: id });
+    if (currentChapter) {
+      const course = await courseModel.findOne({
+        _id: currentChapter.course,
+        author: req.session.user,
+      });
 
-    if (deleteChapter.deletedCount === 1) {
-      return res.json({
-        message: "فصل شما با موفقیت حذف شد",
+      if (course) {
+        await chapterModel.deleteOne({ _id: id });
+
+        return res.json({
+          message: "فصل شما با موفقیت حذف شد",
+        });
+      }
+      return res.status(403).json({
+        message: "شما قادر به حذف این فصل نخواهید بود",
       });
     }
+
     return res.status(404).json({
       message: "فصلی با این مشخصات پیدا نشد",
     });
