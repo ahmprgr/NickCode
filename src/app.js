@@ -6,10 +6,12 @@ const cookieParser = require("cookie-parser");
 const authRouter = require("./modules/user/auth/userRouter.js");
 const isAdmin = require("./middlewares/isAdmin.js");
 const authGuard = require("./middlewares/authGuard.js");
+const isUser = require("./middlewares/isUser.js");
 const { secretKey, dbURI, adminStaticApiUrl } = require("./../configs/env.js");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./../configs/swagger.js");
 const categoryRouter = require("./modules/admin/course/category/categoryRouter.js");
+const cors = require("cors");
 const {
   getAllOrByAthorId,
   getBySlug,
@@ -24,12 +26,17 @@ const {
 const courseRouter = require("./modules/admin/course/courses/coursesRouter.js");
 const chapterRouter = require("./modules/admin/course/courses/chapters/chapterRouter.js");
 const lessonRouter = require("./modules/admin/course/courses/lessons/lessonRouter.js");
+const enrollRouter = require("./modules/user/enrollment/enrollRouter.js");
 const path = require("path");
-const { getAllLessonsInCourse, getLessonBySlug } = require("./modules/publicFuncs/courses/getLesson.js")
+const {
+  getAllLessonsInCourse,
+  getLessonBySlug,
+} = require("./modules/publicFuncs/courses/getLesson.js");
 
 const app = express();
 
 //* middlewares
+app.use(cors({origin:"http://localhost:5173",credentials:true}));
 app.use(cookieParser());
 app.use(
   session({
@@ -64,6 +71,7 @@ app.use(`${adminStaticApiUrl}/categories`, authGuard, isAdmin, categoryRouter);
 app.use(`${adminStaticApiUrl}/courses`, authGuard, isAdmin, courseRouter);
 app.use(`${adminStaticApiUrl}/chapters`, authGuard, isAdmin, chapterRouter);
 app.use(`${adminStaticApiUrl}/lessons`, lessonRouter);
+app.use("/api/me/courses", authGuard, isUser, enrollRouter);
 //* public endpoints
 //get category
 app.get("/api/categories", getAllOrByAthorId);
@@ -71,7 +79,7 @@ app.get("/api/categories/:slug", getBySlug);
 app.get("/api/courses/", getCourses);
 app.get("/api/courses/:slug", getCourseBySlug);
 app.get("/api/chapters/", getAllChapters);
-app.get("/api/courses/:courseSlug/lessons",getAllLessonsInCourse)
-app.get("/api/courses/:courseSlug/lessons/:lessonSlug",getLessonBySlug)
+app.get("/api/courses/:courseSlug/lessons", getAllLessonsInCourse);
+app.get("/api/courses/:courseSlug/lessons/:lessonSlug", getLessonBySlug);
 
 module.exports = app;
