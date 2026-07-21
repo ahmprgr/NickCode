@@ -20,7 +20,7 @@ exports.register = async (req, res) => {
             ...userModel.userid,
             role: userCount >= 2 ? "user" : "admin",
           });
-          req.session.user = user;
+          req.session.user = user._id;
           const userObj = user.toObject();
           Reflect.deleteProperty(userObj, "password");
           Reflect.deleteProperty(userObj, "createdAt");
@@ -49,7 +49,7 @@ exports.register = async (req, res) => {
     }
   } else {
     return res.status(403).json({
-      massage: "شما قبلا احراز هویت شده بوده اید",
+      message: "شما قبلا احراز هویت شده بوده اید",
     });
   }
 };
@@ -62,8 +62,15 @@ exports.login = async (req, res) => {
         const comparePassword = await bcrypt.compare(password, user.password);
         if (comparePassword) {
           req.session.user = user._id;
+          const userObj = user.toObject();
+          Reflect.deleteProperty(userObj, "password");
+          Reflect.deleteProperty(userObj, "createdAt");
+          Reflect.deleteProperty(userObj, "updatedAt");
+          Reflect.deleteProperty(userObj, "_id");
+          Reflect.deleteProperty(userObj, "__v");
           return res.json({
             message: "ورود موفقیت آمیز بود",
+            userObj,
           });
         }
       } else {
