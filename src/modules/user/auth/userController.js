@@ -86,8 +86,10 @@ exports.login = async (req, res) => {
     }
   } else {
     return res.status(403).json({
-      massage: "شما قبلا احراز هویت شده بودید",
+      message: "شما قبلا احراز هویت شده بودید",
     });
+    console.log("baekfjdsf");
+    
   }
 };
 exports.deleteAccount = async (req, res) => {
@@ -203,7 +205,7 @@ exports.getMe = async (req, res) => {
     const userId = req.session.user;
     const userInfo = await userModel
       .findOne({ _id: userId })
-      .select("fullname email userid role -_id");
+      .select("fullname email userid role _id prfile");
 
     return res.json({
       message: "اطلاعات کاربر با موفقیت دریافت شد",

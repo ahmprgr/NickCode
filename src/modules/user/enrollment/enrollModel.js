@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema(
   {
-    title: {
-      type: String,
+    user: {
+      type: mongoose.Types.ObjectId,
+      ref: "users",
       required: true,
     },
     course: {
@@ -11,10 +12,18 @@ const schema = new mongoose.Schema(
       ref: "courses",
       required: true,
     },
+    completedLessons: {
+      type: Array,
+      default: [],
+    },
+    progress: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true },
 );
 
-const model = new mongoose.model("chapter", schema);
+const model = mongoose.model("enrolledCourses", schema);
 
 module.exports = model;

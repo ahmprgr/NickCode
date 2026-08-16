@@ -32,7 +32,6 @@ const {
   getAllLessonsInCourse,
   getLessonBySlug,
 } = require("./modules/publicFuncs/courses/getLesson.js");
-
 const app = express();
 
 //* middlewares
