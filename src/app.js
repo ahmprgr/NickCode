@@ -70,7 +70,7 @@ app.use(`${adminStaticApiUrl}/categories`, authGuard, isAdmin, categoryRouter);
 app.use(`${adminStaticApiUrl}/courses`, authGuard, isAdmin, courseRouter);
 app.use(`${adminStaticApiUrl}/chapters`, authGuard, isAdmin, chapterRouter);
 app.use(`${adminStaticApiUrl}/lessons`, authGuard, isAdmin, lessonRouter);
-app.use("/api/me/courses", authGuard, isUser, enrollRouter);
+app.use(`/api/enrollement`, authGuard, enrollRouter);
 //* public endpoints
 //get category
 app.get("/api/categories", getAllOrByAthorId);

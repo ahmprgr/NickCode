@@ -85,7 +85,7 @@ exports.getAllEnrolledCourses = async (req, res) => {
 
 exports.setLessonViewed = async (req, res) => {
   try {
-    const slug = req.body.slug;
+    const { slug, chapter } = req.body;
     const currentLesson = await lessonModel.findOne({ slug });
     if (currentLesson) {
       const currentChapter = await chapterModel.findOne({ _id: chapter });
@@ -130,6 +130,19 @@ exports.setLessonViewed = async (req, res) => {
 
 exports.isCourseEnrolled = async (req, res) => {
   try {
+    const id = req.body.id;
+    const findEnrolledCourse = await enrollModel.findOne({
+      user: req.session.user,
+      course: id,
+    });
+    if (findEnrolledCourse) {
+      return res.json({
+        message: "شما از قبل در این دوره ثبت نام کرده اید"
+      })
+    }
+    return res.status(403).json({
+      message:"لطفا برای استفاده از محتوای این دوره اول اقدام به ثبت نام در این دوره کنید"
+    })
   } catch (e) {
     return res.status(500).json({
       message: "internal server error",
