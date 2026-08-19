@@ -24,7 +24,7 @@ const router = express.Router();
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/x-www-form-urlencoded:
  *           schema:
  *             type: object
  *             properties:
@@ -114,7 +114,7 @@ router.post("/create", validator(lessonsValidationSchema), createLesson);
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/x-www-form-urlencoded:
  *           schema:
  *             type: object
  *             properties:

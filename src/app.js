@@ -35,7 +35,7 @@ const {
 const app = express();
 
 //* middlewares
-app.use(cors({origin:"http://localhost:5173",credentials:true}));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(cookieParser());
 app.use(
   session({
@@ -69,7 +69,7 @@ app.use("/api/auth", authRouter);
 app.use(`${adminStaticApiUrl}/categories`, authGuard, isAdmin, categoryRouter);
 app.use(`${adminStaticApiUrl}/courses`, authGuard, isAdmin, courseRouter);
 app.use(`${adminStaticApiUrl}/chapters`, authGuard, isAdmin, chapterRouter);
-app.use(`${adminStaticApiUrl}/lessons`, lessonRouter);
+app.use(`${adminStaticApiUrl}/lessons`, authGuard, isAdmin, lessonRouter);
 app.use("/api/me/courses", authGuard, isUser, enrollRouter);
 //* public endpoints
 //get category
