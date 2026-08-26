@@ -23,6 +23,7 @@ const {
   getCourses,
   getCourseBySlug,
 } = require("./modules/publicFuncs/courses/getCourse.js");
+const { getProfile } = require("./modules/publicFuncs/getProfile.js");
 const courseRouter = require("./modules/admin/course/courses/coursesRouter.js");
 const chapterRouter = require("./modules/admin/course/courses/chapters/chapterRouter.js");
 const lessonRouter = require("./modules/admin/course/courses/lessons/lessonRouter.js");
@@ -75,10 +76,15 @@ app.use(`/api/enrollement`, authGuard, enrollRouter);
 //get category
 app.get("/api/categories", getAllOrByAthorId);
 app.get("/api/categories/:slug", getBySlug);
+//get course
 app.get("/api/courses/", getCourses);
 app.get("/api/courses/:slug", getCourseBySlug);
+//get chapter
 app.get("/api/chapters/", getAllChapters);
+//get lesson
 app.get("/api/courses/:courseSlug/lessons", getAllLessonsInCourse);
 app.get("/api/courses/:courseSlug/lessons/:lessonSlug", getLessonBySlug);
+//get profile
+app.get("/api/profile/:userId", getProfile);
 
 module.exports = app;
